@@ -1,26 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <v-layout>
+    <AppTopVue />
+    <v-main>
+      <BridgeVue />
+    </v-main>
+  </v-layout>
 </template>
 
-<script>
-import HelloWorld from './components/HelloWorld.vue'
+<script setup>
+  import { provide } from 'vue';
+  import useWallet from '@/hooks/useWallet'
+  import BridgeVue from './views/ChainBridge.vue';
+  import AppTopVue from './AppTop.vue';
+  import { useBridgeStore } from '@/store/bridge'
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+  const bridgeStore = useBridgeStore()
+  bridgeStore.loopCurrentTokenBalance()
+
+  const { connectWallet, setChain } = useWallet()
+
+  provide('connectWallet', connectWallet)
+  provide('setChain', setChain)
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+.card-center {
+  position: relative;
+  left: 50%;
+  transform: translate(-50%);
 }
 </style>
