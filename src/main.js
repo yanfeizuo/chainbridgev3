@@ -5,6 +5,10 @@ import { loadFonts } from './plugins/webfontloader'
 
 import { createPinia } from 'pinia'
 
+import { Buffer } from "buffer";
+
+window.Buffer = Buffer
+
 loadFonts()
 
 createApp(App)

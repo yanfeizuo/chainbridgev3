@@ -162,6 +162,9 @@ export const useTxStore = defineStore({
         if (String(e.message).includes('user rejected transaction')) {
           msg = 'user rejected transaction'
         }
+        if (String(e.message).includes('insufficient balance for transfer')) {
+          msg = 'insufficient balance for transfer'
+        }
         if (e.data && e.data.message) {
           msg = e.data.message
         }
