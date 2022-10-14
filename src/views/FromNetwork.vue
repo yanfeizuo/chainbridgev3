@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { ref, inject } from 'vue';
   import logos from '@/constants/logos'
   import SelectModalVue from '@/components/SelectModal.vue'
   // import useChain from '@/hooks/useChain'
@@ -35,15 +35,12 @@
     show.value = true
   }
 
-  const close = (val) => {
+  const close = ({ networkId }) => {
     show.value = false
-    if (val) {
-      // updateCurrentFromChain(val)
-      // bridgeStore.$patch((state) => {
-      //   state.currentFromChain = val
-      // })
-    }
+    setChain(networkId)
   }
+
+  const setChain = inject("setChain")
 </script>
 
 <style>

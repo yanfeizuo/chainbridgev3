@@ -78,8 +78,14 @@ export default () => {
           }
         }
         wallet.icon = newWallet.icon
-        wallet.networkId = Number(newWallet.chains[0].id)
-        wallet.networkName = chains.find(c => c.networkId === Number(newWallet.chains[0].id)).name
+        const networkId = Number(newWallet.chains[0].id)
+        wallet.networkId = networkId
+        const network = chains.find(c => c.networkId === networkId)
+        if (network) {
+          wallet.networkName = network.name
+        } else {
+          wallet.networkName = 'Wrong Network'
+        }
         if (newWallet.provider) {
           wallet.provider = markRaw(newWallet.provider)
           const web3Provider = new ethers.providers.Web3Provider(newWallet.provider)

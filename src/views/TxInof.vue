@@ -10,7 +10,7 @@
           <template v-slot:icon>
             <span>{{ index + 1 }}</span>
           </template>
-          <v-card>
+          <v-card :width="txInfoCardWidth">
             <v-card-title :class="['text-h6', `bg-${item.color}`]">
               {{ item.title }}
             </v-card-title>
@@ -38,11 +38,20 @@
   import { useBridgeStore } from '@/store/bridge'
   import { storeToRefs } from 'pinia'
   import { computed, watch } from 'vue';
+  import { useDisplay } from 'vuetify'
 
   const txStore = useTxStore()
   const bridgeStore = useBridgeStore()
+  const { name } = useDisplay()
 
   const { depositInfo, proposalInfo, loading } = storeToRefs(txStore)
+
+  const txInfoCardWidth = computed(() => {
+    if (name.value === 'xs') {
+      return '220'
+    }
+    return '360'
+  })
 
   const infos = computed(() => {
     return [ ...depositInfo.value, ...proposalInfo.value ].map(item => {

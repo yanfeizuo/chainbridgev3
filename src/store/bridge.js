@@ -31,7 +31,8 @@ export const useBridgeStore = defineStore({
   }),
   getters: {
     fromChains() {
-      return chains.filter(c => c.networkId !== this.currentFromChain.networkId)
+      // return chains.filter(c => c.networkId !== this.currentFromChain.networkId)
+      return chains
     },
     toChains() {
       return chains.filter(c => c.networkId !== this.currentFromChain.networkId && c.networkId !== this.currentToChain)
@@ -109,25 +110,27 @@ export const useBridgeStore = defineStore({
     async updateCurrentToken(token) {
       // console.log('token', token)
       this.currentToken = token
-      if (token && this.wallet.web3Provider) {
-        const c = new ethers.Contract(token.address, erc20, this.wallet.web3Provider)
-        const balance = await c.balanceOf(this.wallet.account)
-        // console.log('balance', balance.toString())
-        this.currentToken.balance = new BigNumber(String(balance)).div(`1e${this.currentToken.decimals}`).toFixed()
-      }
+      this.getCurrentTokenBalance()
     },
     loopCurrentTokenBalance() {
       // console.log('get token balance')
       setTimeout(async () => {
-        if (this.currentToken && this.wallet.web3Provider) {
+        await this.getCurrentTokenBalance()
+        this.loopCurrentTokenBalance()
+      }, 5000);
+    },
+    async getCurrentTokenBalance() {
+      if (this.currentToken && this.wallet.web3Provider) {
+        if (this.currentToken.native) {
+          const nativeBalance = await this.wallet.web3Provider.getBalance(this.wallet.account)
+          this.currentToken.balance = utils.formatEther(nativeBalance)
+        } else {
           const c = new ethers.Contract(this.currentToken.address, erc20, this.wallet.web3Provider)
           const balance = await c.balanceOf(this.wallet.account)
           // console.log('balance', balance.toString())
           this.currentToken.balance = new BigNumber(String(balance)).div(`1e${this.currentToken.decimals}`).toFixed()
         }
-        this.loopCurrentTokenBalance()
-      }, 5000);
-    },
-
+      }
+    }
   }
 })

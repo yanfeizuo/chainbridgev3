@@ -57,7 +57,7 @@ export const chains = [
     bridgeAddress1: "0x5e1325404E34FE17f90Cd4A70B83be1094150c3f",
     erc20HandlerAddress: "0x83354D47379881e167F7160A80dAC8269Fe946Fa",
     erc20HandlerAddress1: "0xb3C3A5A20EA20b9754A054666D475625552D5378",
-    rpcUrl: "https://bsc-dataseed.binance.org",
+    rpcUrl: "https://rpc.ankr.com/bsc",
     officialRpc: "https://bsc-dataseed.binance.org",
     type: "Ethereum",
     blockExplorer: "https://bscscan.com",

@@ -1,14 +1,14 @@
 <template>
-  <v-app-bar>
-    <h1>Meter Passport</h1>
+  <v-app-bar color="primary">
+    <h1 class="meter-passport-logo">Meter Passport</h1>
     <v-spacer></v-spacer>
-    <v-chip v-if="wallet.networkName">{{ wallet.networkName }}</v-chip>
+    <v-chip :color="networkNameColor" v-if="wallet.networkName">{{ wallet.networkName }}</v-chip>
     <v-chip class="ml-2" @click="connect">
       <div v-if="shortAccount" class="d-flex">
         <span class="wallet-icon d-flex align-center" v-html="wallet.icon"></span>
         <span>{{ shortAccount }}</span>
       </div>
-      <div v-else>CONNECT</div>
+      <div v-else>NO CONNECT</div>
     </v-chip>
   </v-app-bar>
 </template>
@@ -19,7 +19,7 @@
   import { computed, inject } from 'vue'
 
   const bridgeStore = useBridgeStore()
-  const { wallet } = storeToRefs(bridgeStore)
+  const { wallet, currentFromChain } = storeToRefs(bridgeStore)
   // import useWallet from '@/hooks/useWallet'
 
   // // import logos from '@/constants/logos'
@@ -36,11 +36,22 @@
   })
 
   const connect = inject('connectWallet')
+
+  const networkNameColor = computed(() => {
+    return currentFromChain.value.name !== wallet.value.networkName ? 'green' : null
+  })
 </script>
 
 <style scoped>
   .wallet-icon > :deep svg,img {
     width: 20px !important;
     height: 20px !important;
+  }
+  .meter-passport-logo {
+    text-indent: -1000rem;
+    background: url(@/assets/Meter.png) no-repeat;
+    width: 180px;
+    height: 58px;
+    background-size: contain;
   }
 </style>

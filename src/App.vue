@@ -1,5 +1,5 @@
 <template>
-  <v-layout>
+  <v-layout class="my-main-class">
     <AppTopVue />
     <v-main>
       <BridgeVue />
@@ -28,5 +28,10 @@
   position: relative;
   left: 50%;
   transform: translate(-50%);
+}
+
+.my-main-class {
+  /* background: rgb(var(--v-theme-primary)) */
+  /* background-color: #eef0f2; */
 }
 </style>

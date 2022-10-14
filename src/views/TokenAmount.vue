@@ -49,7 +49,7 @@
 
   watchEffect(() => {
     if (currentToken.value && currentToken.value.balance && amountPercent.value) {
-      amount.value = new BigNumber(currentToken.value.balance).times(amountPercent.value).div(100).toFixed()
+      amount.value = new BigNumber(currentToken.value.balance).times(amountPercent.value).div(100).toFixed(currentToken.value.decimals)
     }
   })
   watch(amount, (val) => {

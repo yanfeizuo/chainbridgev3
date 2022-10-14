@@ -83,7 +83,7 @@ export const useTxStore = defineStore({
 
       // eslint-disable-next-line
       const [epoch, totalSupply] = await controller.globalAmpleforthEpochAndAMPLSupply();
-      
+
       const data = packXCTransferData(
         account,
         recipient,
@@ -162,6 +162,10 @@ export const useTxStore = defineStore({
         if (String(e.message).includes('user rejected transaction')) {
           msg = 'user rejected transaction'
         }
+        if (e.data && e.data.message) {
+          msg = e.data.message
+        }
+        
         this.depositInfo.push({
           status: 'error',
           title: 'Deposit Error',
@@ -240,34 +244,34 @@ export const useTxStore = defineStore({
         }
       )
 
-      rawDestBridge.on(rawDestBridge.filters.ProposalVote(), async (originChainId, _depositNonce, status, dataHash, tx) => {
-          console.log('proposal vote')
-          if (originChainId == currentFromChain.chainId && _depositNonce == this.depositNonce) {
-            try {
-              const txReceipt = await tx.getTransactionReceipt();
-              console.log("proposalVote txReceipt: ", txReceipt);
-              if (txReceipt.status === 1) {
-                this.depositVotes = this.depositVotes + 1
-              }
-              this.proposalInfo.push({
-                status: 'info',
-                title: 'Vote Result',
-                msg: `${txReceipt.from} ${txReceipt.status === 1 ? "Confirmed" : "Rejected"}`,
-                txHash: tx.transactionHash
-              })
-            } catch (e) {
-              this.loading = false
+      // rawDestBridge.on(rawDestBridge.filters.ProposalVote(), async (originChainId, _depositNonce, status, dataHash, tx) => {
+      //     console.log('proposal vote')
+      //     if (originChainId == currentFromChain.chainId && _depositNonce == this.depositNonce) {
+      //       try {
+      //         const txReceipt = await tx.getTransactionReceipt();
+      //         console.log("proposalVote txReceipt: ", txReceipt);
+      //         if (txReceipt.status === 1) {
+      //           this.depositVotes = this.depositVotes + 1
+      //         }
+      //         this.proposalInfo.push({
+      //           status: 'info',
+      //           title: 'Vote Result',
+      //           msg: `${txReceipt.from} ${txReceipt.status === 1 ? "Confirmed" : "Rejected"}`,
+      //           txHash: tx.transactionHash
+      //         })
+      //       } catch (e) {
+      //         this.loading = false
 
-              this.proposalInfo.push({
-                status: 'error',
-                title: 'Transfer Aborted',
-                msg: 'Transfer Aborted',
-                txHash: tx.transactionHash
-              })
-            }
-          }
-        }
-      )
+      //         this.proposalInfo.push({
+      //           status: 'error',
+      //           title: 'Transfer Aborted',
+      //           msg: 'Transfer Aborted',
+      //           txHash: tx.transactionHash
+      //         })
+      //       }
+      //     }
+      //   }
+      // )
     }
   }
 })
